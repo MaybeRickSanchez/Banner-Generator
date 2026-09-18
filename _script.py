@@ -1,5 +1,6 @@
 from PIL import Image
 import os
+import sys
 
 alphabet_path = "Alphabets"
 background_path = "backgrounds"
@@ -13,7 +14,7 @@ widths = {
     "_":3," ":3
 }
 
-ranks = []
+ranks = sys.argv[1:] if len(sys.argv) > 1 else ["HELLO", "WORLD", "TEST"]
 
 alphabets = {}
 for f in os.listdir(alphabet_path):
@@ -21,7 +22,7 @@ for f in os.listdir(alphabet_path):
         alphabets[f.split(".")[0]] = Image.open(os.path.join(alphabet_path, f)).convert("RGBA")
 
 backgrounds = []
-for i in range(1,15):
+for i in range(1, 15):
     p = os.path.join(background_path, f"BG{i}.png")
     if os.path.exists(p):
         backgrounds.append(Image.open(p).convert("RGBA"))
@@ -33,32 +34,33 @@ def build(rank, bg):
         if c == "-":
             total_w += 2
             continue
-        w = widths.get(c,5)
-        chars.append((c,w))
+        w = widths.get(c, 5)
+        chars.append((c, w))
         total_w += w + 1
     total_w += 2
 
     h = bg.height
     w = total_w
-    img = Image.new("RGBA", (w, h), (0,0,0,0))
-    img.paste(bg.resize((w,h)), (0,0))
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    img.paste(bg.resize((w, h)), (0, 0))
 
     x = 3
-    for c,w in chars:
+    for c, w in chars:
         if c == " ":
-            x+=3
+            x += w + 1
             continue
         if c == "-":
-            x+=2
+            x += 2
             continue
         if c in alphabets:
             glyph = alphabets[c]
-            img.paste(glyph, (x,2), glyph)
+            img.paste(glyph, (x, 2), glyph)
         x += w + 1
 
     return img
 
 for idx, rank in enumerate(ranks, start=1):
-    bg = backgrounds[(idx-1) % len(backgrounds)]
+    bg = backgrounds[(idx - 1) % len(backgrounds)]
     out = build(rank, bg)
-    out.save(os.path.join(output_path, f"{rank.replace(' ','_')}.png"))
+    out.save(os.path.join(output_path, f"{rank.replace(' ', '_')}.png")
+)
