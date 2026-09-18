@@ -42,7 +42,7 @@ textures.
     │   ├── ...
     │
     ├── UniCodes/        # Output folder
-    ├── script.py        # Main code
+    ├── _script.py       # Main code
     └── README.md
 
 ## Requirements
@@ -58,13 +58,16 @@ textures.
 2.  Add background PNGs (named `BG1.png`, `BG2.png`, ...) inside
     `backgrounds/`.
 
-3.  Modify the `ranks` list in the script to include the strings you
-    want to render.
-
-4.  Run:
+3.  Run with default ranks:
 
     ``` bash
-    python script.py
+    python _script.py
+    ```
+
+4.  Or specify custom ranks as CLI arguments:
+
+    ``` bash
+    python _script.py "TEXT1" "TEXT2"
     ```
 
 5.  The resulting images will appear in the `UniCodes/` folder.
